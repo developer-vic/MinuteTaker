@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             BackgroundColor="#E9E9E9"
+             x:Class="MinuteTaker.Views.AddEditBookPage"
+             Title="Manage Meeting">
+    <ScrollView>
+        <VerticalStackLayout Padding="20">
+            <Label Text="Enter Meeting Information" TextColor="Black" FontAttributes="Bold" FontSize="22" />
+            <Label Text="Provide your information about the meeting" Margin="0,0,0,20" TextColor="#6E4AD3" FontSize="Body" />
+
+            <Label Text="Meeting Title" FontSize="14" />
+            <Frame Margin="0,0,0,15" Padding="10,0" BorderColor="#D4D4D4">
+                <Entry Placeholder="Conference Discussion" Text="{Binding MeetingTitle}"/>
+            </Frame>
+ 
+            <Label Text="Meeting Content" FontSize="14" />
+            <Frame Padding="20,10" BorderColor="#D4D4D4">
+                <Grid ColumnDefinitions="*,*,*,*,*,*">
+                    <ImageButton Source="record" Grid.Column="0" WidthRequest="30" HeightRequest="30" />
+                    <Image Source="recording.gif" Grid.Column="1" IsAnimationPlaying="{Binding ShowRecording}" />
+                    <Image Source="recording_stop" Grid.Column="2" WidthRequest="70" HeightRequest="30" />
+
+                    <ImageButton Source="read" Grid.Column="3" WidthRequest="30" HeightRequest="30" />
+                    <Image Source="reading.gif" Grid.Column="4"  IsAnimationPlaying="{Binding ShowReading}" />
+
+                    <ImageButton Source="read_rec_stop" Grid.Column="5" WidthRequest="30" HeightRequest="30" /> 
+                </Grid>
+            </Frame>
+            <Frame Margin="0,5" Padding="10,0" BorderColor="#D4D4D4">
+                <Editor Placeholder="Secretary start talking by saying good ....." Text="{Binding MeetingContent}"
+                        HeightRequest="300"/>
+            </Frame>
+            
+            <Button Margin="30" HeightRequest="60" Text="Save Meeting" CornerRadius="10" BackgroundColor="#37256A" 
+                VerticalOptions="EndAndExpand" Command="{Binding MyCommand}" CommandParameter="save" /> 
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

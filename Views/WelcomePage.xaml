@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="MinuteTaker.Views.WelcomePage"
+             Title="WelcomePage">
+    <StackLayout Padding="0,50">
+
+        <StackLayout Margin="0,50,0,0" VerticalOptions="CenterAndExpand" HorizontalOptions="CenterAndExpand">
+            <Image Source="logo" HorizontalOptions="CenterAndExpand" HeightRequest="80"/>
+            <Label Margin="20,10,20,0" FontAttributes="Bold" FontFamily="CommissionerFont" TextColor="Black"
+                   HorizontalTextAlignment="Center" HorizontalOptions="CenterAndExpand">
+                <Label.FormattedText>
+                    <FormattedString>
+                        <Span Text="Design and Implementation of &#x0a;" FontSize="Default" />
+                        <Span Text="MINUTE TAKER MOBILE APP &#x0a;&#x0a;" FontAttributes="Bold" FontSize="Medium"  />
+                        <Span Text="By: Afolabi Fausat Bisola &#x0a;" FontSize="Default" />
+                        <Span Text="CS/HND/F22/3320 &#x0a;&#x0a;" FontAttributes="Bold" FontSize="Medium"  />
+                        <Span Text="Supervise by: Mr Adeyemi S.A"  FontSize="Default" />
+                    </FormattedString>
+                </Label.FormattedText>
+            </Label>
+        </StackLayout>
+
+        <Button Margin="20,0" HeightRequest="60" Text="LOGIN" CornerRadius="10" BackgroundColor="#37256A" 
+                FontSize="Default" FontAttributes="Bold"  Clicked="btnLogin_Clicked" />
+        <Button Margin="20" HeightRequest="60" TextColor="#37256A" Text="REGISTER" CornerRadius="10"
+                FontSize="Default" FontAttributes="Bold" BackgroundColor="Transparent" BorderColor="#37256A" 
+                BorderWidth="1" Clicked="btnRegister_Clicked" />
+
+    </StackLayout>
+</ContentPage>
