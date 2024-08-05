@@ -2,6 +2,7 @@
 using CommunityToolkit.Maui;
 using Microsoft.Maui.Hosting;
 using Microsoft.Maui.Controls.Hosting;
+using FFImageLoading.Maui;
 
 namespace MinuteTaker
 {
@@ -13,6 +14,7 @@ namespace MinuteTaker
             builder
                 .UseMauiApp<App>()
                 .UseMauiCommunityToolkit()
+                .UseFFImageLoading()
                 .ConfigureFonts(fonts =>
                 {
                     fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");

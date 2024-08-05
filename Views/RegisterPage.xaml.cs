@@ -1,3 +1,4 @@
+using MinuteTaker.Controls;
 using System.Windows.Input;
 
 namespace MinuteTaker.Views;
@@ -17,19 +18,20 @@ public partial class RegisterPage : ContentPage
         private bool showReaderView = false;
         private bool showWriterView = true;
         private List<string> organizationList = new List<string>();
+        private bool showLoading;
 
         public List<string> AccTypeList { get; set; }
-        public string SelectedAccType { get => selectedAccType; set { SetProperty(ref selectedAccType, value); OnSelectedAccType(value); } }
-        private void OnSelectedAccType(string value)
+        public string SelectedAccType { get => selectedAccType; set { SetProperty(ref selectedAccType, value); OnSelectedAccType(); } }
+        private void OnSelectedAccType()
         {
             if (ShowReaderView) { ShowReaderView = false; ShowWriterView = true; LoadOrganizationList(); }
-            else if (ShowWriterView) { ShowWriterView = false; ShowReaderView = true; }
+            else if (ShowWriterView) { ShowWriterView = false; ShowReaderView = true; Organization = ""; }
         }
-        private void LoadOrganizationList()
+        private async void LoadOrganizationList()
         {
             if (OrganizationList.Count == 0)
-                OrganizationList = new List<string>() { "Load Saved Orgs" };
-            Organization = OrganizationList[0];
+                OrganizationList = await VUtils.GetAllOrganizations();  
+            Organization = OrganizationList.Count > 0 ? OrganizationList[0] : null;
         }
 
         public bool ShowReaderView { get => showReaderView; set { SetProperty(ref showReaderView, value); } }
@@ -42,7 +44,8 @@ public partial class RegisterPage : ContentPage
         public bool PasswordInputType { get => passwordInputType; set { SetProperty(ref passwordInputType, value); } }
         public string PasswordToggleImage { get => passwordToggleImage; set { SetProperty(ref passwordToggleImage, value); } }
         public string? Organization { get; set; }
-        public List<string> OrganizationList { get => organizationList; set => organizationList = value; }
+        public List<string> OrganizationList { get => organizationList; set { SetProperty(ref organizationList, value); } }
+        public bool ShowLoading { get => showLoading; set { SetProperty(ref showLoading, value); } }
 
         public ICommand? MyCommand { get; protected set; }
         public ICommand? PickerCommand { get; protected set; }
@@ -83,7 +86,7 @@ public partial class RegisterPage : ContentPage
         }
 
 
-        private void ValidateContiueClicked()
+        private async void ValidateContiueClicked()
         {
             if (string.IsNullOrEmpty(EmailAddress) || string.IsNullOrEmpty(Password) || string.IsNullOrEmpty(UserFullName)
                  || string.IsNullOrEmpty(SelectedAccType) || string.IsNullOrEmpty(PhoneNumber) || string.IsNullOrEmpty(Organization))
@@ -92,7 +95,20 @@ public partial class RegisterPage : ContentPage
                 VUtils.ToastText("Incorrect Email Format");
             else
             {
-                VUtils.GetoPage(new DashboardPage(), true);
+                ShowLoading = true;
+                UserModel newUser = new UserModel()
+                {
+                    Email = EmailAddress,
+                    Password = Password,
+                    FullName = UserFullName,
+                    Phone = PhoneNumber,
+                    Organization = Organization,
+                    UserType = SelectedAccType,
+                    UserId = VUtils.GetTransactionRef()
+                };
+                bool regSuccess = await VUtils.RegisterUser(newUser);
+                if(regSuccess) VUtils.GetoPage(new DashboardPage(), true);
+                ShowLoading = false;
             }
         }
 

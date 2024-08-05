@@ -14,4 +14,9 @@ public partial class WelcomePage : ContentPage
     {
        Application.Current.MainPage = new NavigationPage(new RegisterPage());
     }
+
+    private void TapGestureRecognizer_Tapped(object sender, TappedEventArgs e)
+    {
+        Launcher.TryOpenAsync("https://programmergwin.com");
+    }
 }

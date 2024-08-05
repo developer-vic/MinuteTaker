@@ -5,116 +5,130 @@
              BackgroundColor="#E9E9E9"
              x:Class="MinuteTaker.Views.DashboardPage"
              Title="WriterDashboard">
-    <ScrollView>
-        <VerticalStackLayout Padding="20">
-            <HorizontalStackLayout HorizontalOptions="Center" >
-                <Image Source="logo" WidthRequest="30" Margin="10,0" />
-                <Label Text="Minute Taker Mobile App" FontSize="Medium" FontAttributes="Bold" TextColor="#6E4AD3" />
-            </HorizontalStackLayout>
-            <Label Text="By: CS/HND/F22/3320" FontSize="Small" HorizontalOptions="Center" FontAttributes="Bold" />
+    <ContentPage.Content>
+        <RefreshView IsRefreshing="{Binding ShowLoading}" Command="{Binding MyCommand}" CommandParameter="reload">
+            <ScrollView VerticalScrollBarVisibility="Never">
+                <StackLayout Padding="20,20,20,5">
+                    <HorizontalStackLayout HorizontalOptions="Center" >
+                        <Image Source="logo" WidthRequest="30" Margin="10,0" />
+                        <Label Text="Minute Taker Mobile App" FontSize="Medium" FontAttributes="Bold" TextColor="#6E4AD3" />
+                    </HorizontalStackLayout>
+                    <Label Text="By: CS/HND/F22/3320" FontSize="Small" HorizontalOptions="Center" FontAttributes="Bold" />
 
-            <Grid Margin="0,30">
-                <Image Source="dash_banner" Aspect="AspectFill" HorizontalOptions="FillAndExpand" Margin="-10" />
-                <VerticalStackLayout Padding="10,0,10,10" Spacing="20">
-                    <Grid RowDefinitions="auto,auto,auto" ColumnDefinitions="auto,*">
-                        <Label Grid.Row="0" Grid.Column="0" Text="Welcome, Userfullname" FontSize="18" FontAttributes="Bold" TextColor="White" />
-                        <Label Grid.Row="1" Grid.Column="0" Text="You are a UserType" FontSize="Default" TextColor="White"/>
-                        <Label Grid.Row="2" Grid.Column="0" Text="name@mail.com" FontSize="Default" TextColor="White"/>
-                        <Frame Grid.RowSpan="3" Grid.Column="1" HorizontalOptions="End" HasShadow="True" Padding="0" VerticalOptions="Center">
-                            <ImageButton Source="logout" WidthRequest="50" HeightRequest="50"/>
-                        </Frame>
+                    <Grid Margin="0,30">
+                        <Image Source="dash_banner" Aspect="AspectFill" HorizontalOptions="FillAndExpand" Margin="-10" />
+                        <VerticalStackLayout Padding="10,0,10,10" Spacing="20">
+                            <Grid RowDefinitions="auto,auto,auto" ColumnDefinitions="auto,*">
+                                <Label Grid.Row="0" Grid.Column="0" Text="{Binding UserType}" FontSize="18" FontAttributes="Bold" TextColor="White" />
+                                <Label Grid.Row="1" Grid.Column="0" Text="{Binding UserFullName}" FontSize="Default" TextColor="White"/>
+                                <Label Grid.Row="2" Grid.Column="0" Text="{Binding UserEmail}" FontSize="Default" TextColor="White"/>
+                                <Frame Grid.RowSpan="3" Grid.Column="1" HorizontalOptions="End" HasShadow="True" Padding="0" VerticalOptions="Center">
+                                    <ImageButton Source="logout" WidthRequest="50" HeightRequest="50" Command="{Binding MyCommand}" CommandParameter="logout" />
+                                </Frame>
+                            </Grid>
+                            <Grid RowDefinitions="*" ColumnDefinitions="*,*" ColumnSpacing="20">
+                                <Frame Grid.Column="0" HasShadow="True" Padding="10">
+                                    <VerticalStackLayout>
+                                        <Label Text="{Binding MeetingsViewed}" FontSize="18" FontAttributes="Bold" TextColor="#6E4AD3" />
+                                        <Label Text="Viewed" FontSize="Default" />
+                                    </VerticalStackLayout>
+                                </Frame>
+                                <Frame Grid.Column="1" IsVisible="{Binding IsWriter}" Padding="10">
+                                    <VerticalStackLayout>
+                                        <Label Text="{Binding MeetingsCreated}" FontSize="18" FontAttributes="Bold" TextColor="#6E4AD3" />
+                                        <Label Text="Created" FontSize="Default" />
+                                    </VerticalStackLayout>
+                                </Frame>
+                                <Frame Grid.Column="1" IsVisible="{Binding IsNotWriter}" Padding="10">
+                                    <VerticalStackLayout>
+                                        <Label Text="{Binding MeetingsAvailable}" FontSize="18" FontAttributes="Bold" TextColor="#6E4AD3" />
+                                        <Label Text="Available" FontSize="Default" />
+                                    </VerticalStackLayout>
+                                </Frame>
+                            </Grid>
+                        </VerticalStackLayout>
                     </Grid>
-                    <Grid RowDefinitions="*" ColumnDefinitions="*,*" ColumnSpacing="20">
-                        <Frame Grid.Column="0" HasShadow="True" Padding="10">
-                            <VerticalStackLayout>
-                                <Label Text="10" FontSize="18" FontAttributes="Bold" TextColor="#6E4AD3" />
-                                <Label Text="Meetings' viewed" FontSize="Default" />
-                            </VerticalStackLayout>
-                        </Frame>
-                        <Frame Grid.Column="1" IsVisible="True" Padding="10">
-                            <VerticalStackLayout>
-                                <Label Text="10" FontSize="18" FontAttributes="Bold" TextColor="#6E4AD3" />
-                                <Label Text="Meetings' created" FontSize="Default" />
-                            </VerticalStackLayout>
-                        </Frame>
-                        <Frame Grid.Column="1" IsVisible="False" Padding="10">
-                            <VerticalStackLayout>
-                                <Label Text="10" FontSize="18" FontAttributes="Bold" TextColor="#6E4AD3" />
-                                <Label Text="Meetings' available" FontSize="Default" />
-                            </VerticalStackLayout>
-                        </Frame>
-                    </Grid>
-                </VerticalStackLayout>
-            </Grid>
 
-            <Button ImageSource="add_icon" BackgroundColor="White" BorderWidth="1" BorderColor="#6E4AD3" 
+                    <Button ImageSource="add_icon" BackgroundColor="White" BorderWidth="1" BorderColor="#6E4AD3" 
                     CornerRadius="10" Text="Add New Meeting" TextColor="#6E4AD3" FontAttributes="Bold" FontSize="16"
-                     Command="{Binding MyCommand}" CommandParameter="add"/>
-            
-            <Frame Margin="0,20" BackgroundColor="#FFEBC6" CornerRadius="12" Padding="20" HasShadow="False">
-                <StackLayout Orientation="Horizontal">
-                    <StackLayout.GestureRecognizers>
-                        <TapGestureRecognizer Command="{Binding MyCommand}" CommandParameter="history" />
-                    </StackLayout.GestureRecognizers>
-                    <Image Source="books_icon" WidthRequest="80" HeightRequest="50" Margin="-10" Aspect="AspectFit" />
-                    <BoxView WidthRequest=".5" VerticalOptions="FillAndExpand" Color="#684C18" Margin="10,0"/>
-                    <Label>
+                     Command="{Binding MyCommand}" CommandParameter="add" IsVisible="{Binding IsWriter}"/>
+
+                    <Frame Margin="0,20" BackgroundColor="#FFEBC6" CornerRadius="12" Padding="20" HasShadow="False">
+                        <StackLayout Orientation="Horizontal">
+                            <StackLayout.GestureRecognizers>
+                                <TapGestureRecognizer Command="{Binding MyCommand}" CommandParameter="history" />
+                            </StackLayout.GestureRecognizers>
+                            <Image Source="books_icon" WidthRequest="80" HeightRequest="50" Margin="-10" Aspect="AspectFit" />
+                            <BoxView WidthRequest=".5" VerticalOptions="FillAndExpand" Color="#684C18" Margin="10,0"/>
+                            <Label>
+                                <Label.FormattedText>
+                                    <FormattedString>
+                                        <Span Text="Meeting Library" TextColor="#644F28" FontAttributes="Bold" FontSize="Default" />
+                                        <Span Text="&#10;Find all meetings here" TextColor="#644F28" FontSize="Small" />
+                                    </FormattedString>
+                                </Label.FormattedText>
+                            </Label>
+                            <ImageButton Source="arrow_right" Command="{Binding MyCommand}" CommandParameter="history"
+                                 BackgroundColor="Transparent" HorizontalOptions="EndAndExpand" 
+                                 VerticalOptions="Center" WidthRequest="20"/>
+                        </StackLayout>
+                    </Frame>
+
+                    <Label Text="Recent Meetings" FontSize="Default" HorizontalOptions="Center" FontAttributes="Bold" />
+                    <CollectionView x:Name="colBookList" ItemsSource="{Binding BookList}" 
+                            SelectedItem="{Binding SelectedBook, Mode=TwoWay}" VerticalOptions="FillAndExpand">
+                        <CollectionView.EmptyView>
+                            <Label Text="No Meeting Available" HorizontalOptions="Center" Margin="20" />
+                        </CollectionView.EmptyView>
+                        <CollectionView.ItemTemplate>
+                            <DataTemplate>
+                                <Frame Margin="0,5" BackgroundColor="#E2DBF6" CornerRadius="12" Padding="10,0" HasShadow="False">
+                                    <Grid ColumnDefinitions="*,auto">
+                                        <HorizontalStackLayout Grid.Column="0" Padding="10,5">
+                                            <HorizontalStackLayout.GestureRecognizers>
+                                                <TapGestureRecognizer Tapped="TapGestureRecognizer_Tapped" />
+                                            </HorizontalStackLayout.GestureRecognizers>
+                                            <Image Source="book_read" IsVisible="{Binding isNotRead}" WidthRequest="50" HeightRequest="50" Margin="-10" Aspect="AspectFit" />
+                                            <Image Source="book_unread" IsVisible="{Binding isRead}" WidthRequest="50" HeightRequest="50" Margin="-10" Aspect="AspectFit" />
+                                            <BoxView WidthRequest=".5" VerticalOptions="FillAndExpand" Color="#684C18" Margin="15,0,10,0"/>
+                                            <Label>
+                                                <Label.FormattedText>
+                                                    <FormattedString>
+                                                        <Span Text="{Binding title}" TextColor="#6E4AD3" FontAttributes="Bold" FontSize="Default" />
+                                                        <Span Text="&#10;" TextColor="#644F28" FontSize="Small" />
+                                                        <Span Text="{Binding dateTime}" TextColor="#644F28" FontSize="Small" />
+                                                    </FormattedString>
+                                                </Label.FormattedText>
+                                            </Label>
+                                        </HorizontalStackLayout>
+                                        <Image Source="arrow_go_forward" IsVisible="{Binding isNotAdmin}" HorizontalOptions="EndAndExpand" VerticalOptions="Center" WidthRequest="20"/>
+                                        <VerticalStackLayout Grid.Column="1" IsVisible="{Binding isAdmin}" Spacing="10"
+                                                     VerticalOptions="Center" HorizontalOptions="EndAndExpand">
+                                            <ImageButton Source="edit" HorizontalOptions="Center" VerticalOptions="Center" 
+                                                 WidthRequest="30" HeightRequest="20" Clicked="EditImageButton_Clicked"/>
+                                            <ImageButton Source="delete" HorizontalOptions="Center" VerticalOptions="Center" 
+                                                 WidthRequest="30" HeightRequest="20" Clicked="DeleteImageButton_Clicked"/>
+                                        </VerticalStackLayout>
+                                    </Grid>
+                                </Frame>
+                            </DataTemplate>
+                        </CollectionView.ItemTemplate>
+                    </CollectionView>
+
+                    <Label HorizontalOptions="EndAndExpand" VerticalOptions="EndAndExpand">
+                        <Label.GestureRecognizers>
+                            <TapGestureRecognizer Command="{Binding MyCommand}" CommandParameter="gwin" />
+                        </Label.GestureRecognizers>
                         <Label.FormattedText>
                             <FormattedString>
-                                <Span Text="Meeting Library" TextColor="#644F28" FontAttributes="Bold" FontSize="Default" />
-                                <Span Text="&#10;Find all meetings here" TextColor="#644F28" FontSize="Small" />
+                                <Span Text="Powered by: " TextColor="#6E4AD3" />
+                                <Span Text="programmergwin.com" TextColor="Blue" />
                             </FormattedString>
                         </Label.FormattedText>
                     </Label>
-                    <ImageButton Source="arrow_right" Command="{Binding MyCommand}" CommandParameter="history"
-                                 BackgroundColor="Transparent" HorizontalOptions="EndAndExpand" 
-                                 VerticalOptions="Center" WidthRequest="20"/>
                 </StackLayout>
-            </Frame>
-
-            <Label Text="Recent Meetings" FontSize="Default" HorizontalOptions="Center" FontAttributes="Bold" />
-            <CollectionView x:Name="colBookList" ItemsSource="{Binding BookList}" 
-                            SelectedItem="{Binding SelectedBook, Mode=TwoWay}">
-                <CollectionView.EmptyView>
-                    <DataTemplate>
-                        <Label Text="No Meeting Available" HorizontalOptions="Center"  />
-                    </DataTemplate>
-                </CollectionView.EmptyView>
-                <CollectionView.ItemTemplate>
-                    <DataTemplate>
-                        <Frame Margin="0,5" BackgroundColor="#E2DBF6" CornerRadius="12" Padding="15" HasShadow="False">
-                            <Frame.GestureRecognizers>
-                                <TapGestureRecognizer Tapped="TapGestureRecognizer_Tapped" />
-                            </Frame.GestureRecognizers>
-                            <StackLayout Orientation="Horizontal">
-                                <Image Source="book_read" IsVisible="{Binding isRead}" WidthRequest="80" HeightRequest="50" Margin="-10" Aspect="AspectFit" />
-                                <Image Source="book_unread" IsVisible="{Binding isNotRead}" WidthRequest="80" HeightRequest="50" Margin="-10" Aspect="AspectFit" />
-                                <BoxView WidthRequest=".5" VerticalOptions="FillAndExpand" Color="#684C18" Margin="10,0"/>
-                                <Label>
-                                    <Label.FormattedText>
-                                        <FormattedString>
-                                            <Span Text="{Binding title}" TextColor="#6E4AD3" FontAttributes="Bold" FontSize="Default" />
-                                            <Span Text="&#10;" TextColor="#644F28" FontSize="Small" />
-                                            <Span Text="{Binding dateTime, StringFormat='{0:MMM dd, yyyy - hh:mm tt}'}" 
-                                                  TextColor="#644F28" FontSize="Small" />
-                                        </FormattedString>
-                                    </Label.FormattedText>
-                                </Label>
-                                <Image Source="arrow_go_forward" IsVisible="{Binding isNotAdmin}" HorizontalOptions="EndAndExpand" VerticalOptions="Center" WidthRequest="20"/>
-                                <VerticalStackLayout IsVisible="{Binding isAdmin}" Spacing="10"
-                                                     VerticalOptions="Center" HorizontalOptions="EndAndExpand">
-                                    <ImageButton Source="edit" HorizontalOptions="Center" VerticalOptions="Center" 
-                                                 WidthRequest="20" HeightRequest="20"/>
-                                    <ImageButton Source="delete" HorizontalOptions="Center" VerticalOptions="Center" 
-                                                 WidthRequest="20" HeightRequest="20"/>
-                                </VerticalStackLayout>
-                            </StackLayout>
-                        </Frame>
-                    </DataTemplate>
-                </CollectionView.ItemTemplate>
-            </CollectionView>
- 
-        </VerticalStackLayout>
-    </ScrollView>
+            </ScrollView>
+        </RefreshView>
+    </ContentPage.Content>
 </ContentPage>
     

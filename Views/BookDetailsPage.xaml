@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:ffimageloading="clr-namespace:FFImageLoading.Maui;assembly=FFImageLoading.Maui"
+             BackgroundColor="#E9E9E9"
+             x:Class="MinuteTaker.Views.BookDetailsPage"
+             Title="Meeting Details">
+    <ContentPage.Content>
+        <ScrollView>
+            <StackLayout Padding="20">  
+                <Label Text="{Binding MeetingTitle}" TextColor="Black" FontAttributes="Bold" FontSize="22" />
+                <Grid ColumnDefinitions="*,auto">
+                    <Label Grid.Column="0" Text="Meeting Content" Margin="0,0,0,20" TextColor="#6E4AD3" FontSize="Body" VerticalOptions="Center" />
+                    <ImageButton Grid.Column="1" Source="edit" WidthRequest="30" BackgroundColor="Transparent" 
+                                 IsVisible="{Binding IsWriter}" Command="{Binding MyCommand}" CommandParameter="edit" />
+                </Grid>
+                <Frame Padding="20,10" BorderColor="#D4D4D4" HeightRequest="50">
+                    <Grid ColumnDefinitions="auto,*,auto">
+                        <ImageButton Grid.Column="0" WidthRequest="30" HeightRequest="30" Source="read" 
+                                Command="{Binding MyCommand}" CommandParameter="read" IsVisible="{Binding ShowRead}" />
+                        <Label Grid.Column="1" IsVisible="{Binding ShowRead}" HorizontalOptions="FillAndExpand" 
+                            Text="Click to read content" VerticalOptions="Center" Margin="15,2,0,0">
+                            <Label.GestureRecognizers>
+                                <TapGestureRecognizer Command="{Binding MyCommand}" CommandParameter="read"/>
+                            </Label.GestureRecognizers>
+                        </Label>
+
+                        <ffimageloading:CachedImage Grid.Column="1" IsVisible="{Binding ShowReading}" Source="{Binding ImgReading}"
+                                Aspect="AspectFill" WidthRequest="50" HorizontalOptions="FillAndExpand"/>
+                        <ImageButton Grid.Column="2" WidthRequest="30" HeightRequest="30" Source="read_rec_stop" 
+                            Command="{Binding MyCommand}" CommandParameter="read" IsVisible="{Binding ShowReading}" />
+                    </Grid>
+                </Frame>
+
+                <StackLayout>
+                    <Frame Margin="0,5" Padding="15,10" BorderColor="#D4D4D4">
+                        <Label Text="{Binding MeetingContent}"  TextColor="#6E4AD3"/>
+                    </Frame>
+                </StackLayout>
+            </StackLayout>
+        </ScrollView>
+    </ContentPage.Content>
+</ContentPage>

@@ -26,6 +26,9 @@
                             <BoxView Color="#AAAAAA" HeightRequest="1" Margin="0,-6,30,20" HorizontalOptions="FillAndExpand" />
                         </StackLayout>
 
+                        <ActivityIndicator IsVisible="{Binding ShowLoading}" IsRunning="{Binding ShowLoading}" 
+                                               VerticalOptions="Center" HorizontalOptions="Center" Color="#37256A"/>
+                        
                         <!--buttom buttons-->
                         <Button Margin="30,20,30,20" HeightRequest="60" Text="Sign In" CornerRadius="10" BackgroundColor="#37256A" 
                                 VerticalOptions="EndAndExpand" x:Name="btnSignIn" Command="{Binding MyCommand}" CommandParameter="sign_in" />

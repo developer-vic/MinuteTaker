@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="MinuteTaker.Views.BookListPage"
+             Title="All Meetings">
+    <RefreshView IsRefreshing="{Binding ShowLoading}" Command="{Binding MyCommand}" CommandParameter="reload">
+        <VerticalStackLayout Padding="10,0">
+            <Frame Margin="10" Padding="10,0" BorderColor="#D4D4D4">
+                <Entry Placeholder="Search by title" Text="{Binding SearchTitle}"/>
+            </Frame>
+
+            <CollectionView x:Name="colBookListFull" ItemsSource="{Binding BookList}" SelectedItem="{Binding SelectedBook, Mode=TwoWay}" VerticalOptions="FillAndExpand">
+                <CollectionView.EmptyView>
+                    <Label Text="No Meeting Available" HorizontalOptions="Center" Margin="20" />
+                </CollectionView.EmptyView>
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Frame Margin="0,5" BackgroundColor="#E2DBF6" CornerRadius="12" Padding="10,0" HasShadow="False">
+                            <Grid ColumnDefinitions="*,auto">
+                                <HorizontalStackLayout Grid.Column="0" Padding="10,5">
+                                    <HorizontalStackLayout.GestureRecognizers>
+                                        <TapGestureRecognizer Tapped="TapGestureRecognizer_Tapped" />
+                                    </HorizontalStackLayout.GestureRecognizers>
+                                    <Image Source="book_read" IsVisible="{Binding isNotRead}" WidthRequest="50" HeightRequest="50" Margin="-10" Aspect="AspectFit" />
+                                    <Image Source="book_unread" IsVisible="{Binding isRead}" WidthRequest="50" HeightRequest="50" Margin="-10" Aspect="AspectFit" />
+                                    <BoxView WidthRequest=".5" VerticalOptions="FillAndExpand" Color="#684C18" Margin="15,0,10,0"/>
+                                    <Label>
+                                        <Label.FormattedText>
+                                            <FormattedString>
+                                                <Span Text="{Binding title}" TextColor="#6E4AD3" FontAttributes="Bold" FontSize="Default" />
+                                                <Span Text="&#10;" TextColor="#644F28" FontSize="Small" />
+                                                <Span Text="{Binding dateTime}" TextColor="#644F28" FontSize="Small" />
+                                            </FormattedString>
+                                        </Label.FormattedText>
+                                    </Label>
+                                </HorizontalStackLayout>
+                                <Image Source="arrow_go_forward" IsVisible="{Binding isNotAdmin}" HorizontalOptions="EndAndExpand" VerticalOptions="Center" WidthRequest="20"/>
+                                <VerticalStackLayout Grid.Column="1" IsVisible="{Binding isAdmin}" Spacing="10"
+                                   VerticalOptions="Center" HorizontalOptions="EndAndExpand">
+                                    <ImageButton Source="edit" HorizontalOptions="Center" VerticalOptions="Center" 
+                               WidthRequest="30" HeightRequest="20" Clicked="EditImageButton_Clicked"/>
+                                    <ImageButton Source="delete" HorizontalOptions="Center" VerticalOptions="Center" 
+                               WidthRequest="30" HeightRequest="20" Clicked="DeleteImageButton_Clicked"/>
+                                </VerticalStackLayout>
+                            </Grid>
+                        </Frame>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+        </VerticalStackLayout>
+    </RefreshView>
+</ContentPage>

@@ -48,6 +48,9 @@
                         <BoxView Color="#AAAAAA" HeightRequest="1" Margin="0,-6,0,20" HorizontalOptions="FillAndExpand" />
                     </StackLayout>
 
+                    <ActivityIndicator IsVisible="{Binding ShowLoading}" IsRunning="{Binding ShowLoading}" 
+                                               VerticalOptions="Center" HorizontalOptions="Center" Color="#37256A"/>
+                    
                     <!--buttom buttons-->
                     <Button Margin="20,0,20,0" HeightRequest="60" Text="SIGN UP" CornerRadius="10" BackgroundColor="#37256A" VerticalOptions="EndAndExpand" x:Name="btnContinue" Command="{Binding MyCommand}" CommandParameter="sign_up" />
                     <StackLayout Orientation="Horizontal" Margin="20,20,20,40" HorizontalOptions="CenterAndExpand">

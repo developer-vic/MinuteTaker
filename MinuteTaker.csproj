@@ -73,15 +73,19 @@
 	  <None Remove="Resources\Images\logout.png" />
 	  <None Remove="Resources\Images\logo_banner.png" />
 	  <None Remove="Resources\Images\recording.gif" />
+	  <None Remove="Resources\Images\recording_stop.png" />
 	  <None Remove="Resources\Images\search_icon.png" />
 	  <None Remove="Resources\Images\speaker.png" />
 	</ItemGroup>
 
 	<ItemGroup>
 		<PackageReference Include="CommunityToolkit.Maui" Version="8.0.0" />
+		<PackageReference Include="FFImageLoading.Maui" Version="1.2.6" />
 		<PackageReference Include="Microsoft.Maui.Controls" Version="8.0.70" />
 		<PackageReference Include="Microsoft.Maui.Controls.Compatibility" Version="8.0.70" />
 		<PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="8.0.0" />
+		<PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+		<PackageReference Include="Plugin.Maui.Audio" Version="3.0.0" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -92,6 +96,12 @@
 
 	<ItemGroup>
 	  <MauiXaml Update="Views\AddEditBookPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\BookDetailsPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\BookListPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Views\LoginPage.xaml">
