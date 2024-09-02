@@ -230,10 +230,8 @@ namespace MinuteTaker
                 string savedBookList = await PostRequest("/noteTakerGet", "savedBookList", "");
                 if (!string.IsNullOrEmpty(savedBookList))
                     AllBookList = JsonConvert.DeserializeObject<List<BookModel>>(savedBookList);
-                if (AllBookList == null) AllBookList = new List<BookModel>();
-                if (AllBookList.Count != 0)
-                    AllBookList = AllBookList.Where(p => p.organization == LoggedInUser?.Organization).ToList();
-                return AllBookList;
+                if (AllBookList == null) AllBookList = new List<BookModel>(); 
+                return AllBookList.Where(p => p.organization == LoggedInUser?.Organization).ToList();
             }
             catch (Exception)
             {
