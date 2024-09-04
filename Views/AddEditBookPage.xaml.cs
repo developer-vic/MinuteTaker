@@ -7,13 +7,23 @@ namespace MinuteTaker.Views;
 
 public partial class AddEditBookPage : ContentPage
 {
+    AddEditBookVM viewModel;
     public AddEditBookPage(Controls.BookModel? updatingBook)
     {
         InitializeComponent();
-        BindingContext = new AddEditBookVM(updatingBook);
+        viewModel = new AddEditBookVM(updatingBook);
+        BindingContext = viewModel;
     }
+    protected override async void OnDisappearing()
+    {
+        base.OnDisappearing();
+        await viewModel.StopListeningAsync();
+    }
+
+
     private class AddEditBookVM : BaseViewModel
     {
+        ISpeechToText? _speechRecognizer; 
         private CancellationTokenSource? _cancellationTokenSource;
         Controls.BookModel? _UpdatingBook = null;
 
@@ -35,8 +45,8 @@ public partial class AddEditBookPage : ContentPage
 
         public AddEditBookVM(Controls.BookModel? updatingBook)
         {
-            Initialize(); 
-            if(updatingBook != null)
+            Initialize(); _speechRecognizer = SpeechToText.Default;
+            if (updatingBook != null)
             {
                 MeetingContent = updatingBook.content;
                 MeetingTitle = updatingBook.title;
@@ -99,12 +109,12 @@ public partial class AddEditBookPage : ContentPage
                 return;
             }
         } 
-        private void OnRecordClick()
+        private async void OnRecordClick()
         {
             ShowRecording = !ShowRecording;
             ShowRecord = !ShowRecording;
             if (ShowRecording) StartListening();
-            else StopListening();
+            else await StopListeningAsync();
         } 
         private async void StartListening()
         {
@@ -113,40 +123,91 @@ public partial class AddEditBookPage : ContentPage
             _cancellationTokenSource = new CancellationTokenSource();
             await StartListeningAsync();
         }
-        private async Task StartListeningAsync()
+        //private async Task StartListeningAsync()
+        //{
+        //    try
+        //    {
+        //        if (_cancellationTokenSource == null)
+        //            _cancellationTokenSource = new CancellationTokenSource();
+        //        var recognitionResult = await SpeechToText.Default.ListenAsync(CultureInfo.GetCultureInfo("en-NG"),
+        //            new Progress<string>(partialText =>
+        //            {
+        //                ImgRecording = "recording.gif"; 
+        //            }), _cancellationTokenSource.Token);
+        //        if (recognitionResult.IsSuccessful)
+        //        {
+        //            MeetingContent += recognitionResult.Text + " ";
+        //            ImgRecording = "recording_stop.png";
+        //        }
+        //        await StartListeningAsync();
+        //    }
+        //    catch (Exception)
+        //    {
+        //        VUtils.ToastText("error listening to voice");
+        //        OnRecordClick();
+        //    }
+        //}
+        //private void StopListeningAsync()
+        //{
+        //    try
+        //    {
+        //        _cancellationTokenSource?.Cancel();
+        //        _cancellationTokenSource = null;
+        //    }
+        //    catch (Exception)
+        //    { 
+        //    }
+        //}
+
+        private bool IsListening = false; 
+        public async Task StartListeningAsync()
         {
+            if (IsListening)
+                return;
             try
             {
-                if (_cancellationTokenSource == null)
-                    _cancellationTokenSource = new CancellationTokenSource();
-                var recognitionResult = await SpeechToText.Default.ListenAsync(CultureInfo.GetCultureInfo("en-NG"),
-                    new Progress<string>(partialText =>
-                    {
-                        ImgRecording = "recording.gif"; 
-                    }), _cancellationTokenSource.Token);
-                if (recognitionResult.IsSuccessful)
-                {
-                    MeetingContent += recognitionResult.Text + " ";
-                    ImgRecording = "recording_stop.png";
-                }
-                await StartListeningAsync();
+                if (_cancellationTokenSource == null) _cancellationTokenSource = new CancellationTokenSource();
+
+                IsListening = true; _speechRecognizer = SpeechToText.Default;
+                _speechRecognizer.RecognitionResultCompleted += OnSpeechRecognized; ImgRecording = "recording.gif";
+                await _speechRecognizer.StartListenAsync(CultureInfo.GetCultureInfo("en-NG"), _cancellationTokenSource.Token);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                VUtils.ToastText("error listening to voice");
-                OnRecordClick();
-            }
+                VUtils.ToastText(ex.Message);
+            }                    
         }
-        private void StopListening()
+         
+        public async Task StopListeningAsync()
         {
+            IsListening = false;
+            if (_speechRecognizer==null || _cancellationTokenSource==null)
+                return;
+
             try
             {
-                _cancellationTokenSource?.Cancel();
-                _cancellationTokenSource = null;
+                await _speechRecognizer.StopListenAsync(_cancellationTokenSource.Token);
+                _speechRecognizer.RecognitionResultCompleted -= OnSpeechRecognized;
+                await _speechRecognizer.DisposeAsync(); _speechRecognizer = null;
+
+                _cancellationTokenSource?.Cancel(); _cancellationTokenSource = null;
             }
-            catch (Exception)
-            { 
+            catch (Exception ex)
+            {
+                VUtils.ToastText(ex.Message);
             }
         }
+
+        private async void OnSpeechRecognized(object? sender, SpeechToTextRecognitionResultCompletedEventArgs e)
+        {
+            string recognizedText = e.RecognitionResult;
+            MeetingContent += recognizedText + " ";
+            ImgRecording = "recording_stop.png";
+            IsListening = false;
+
+            await StopListeningAsync();
+            await StartListeningAsync(); 
+        }
+
     }
 }

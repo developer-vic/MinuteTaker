@@ -82,7 +82,7 @@
                         </CollectionView.EmptyView>
                         <CollectionView.ItemTemplate>
                             <DataTemplate>
-                                <Frame Margin="0,5" BackgroundColor="#E2DBF6" CornerRadius="12" Padding="10,0" HasShadow="False">
+                                <Frame Margin="0,5" BackgroundColor="#E2DBF6" CornerRadius="12" Padding="15,10" HasShadow="False">
                                     <Grid ColumnDefinitions="*,auto">
                                         <HorizontalStackLayout Grid.Column="0" Padding="10,5">
                                             <HorizontalStackLayout.GestureRecognizers>
