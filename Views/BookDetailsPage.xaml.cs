@@ -1,7 +1,4 @@
-using CommunityToolkit.Maui.Media;
 using MinuteTaker.Controls;
-using Plugin.Maui.Audio;
-using System.Globalization;
 using System.Windows.Input;
 
 namespace MinuteTaker.Views;
@@ -23,8 +20,7 @@ public partial class BookDetailsPage : ContentPage
     private class AddEditBookVM : BaseViewModel
     {
         private CancellationTokenSource? _cancellationTokenSource;
-        private Locale? CURRENT_LOCALE;
-        private IAudioPlayer? _audioPlayer;
+        private Locale? CURRENT_LOCALE; 
 
         private bool showReading;
         private bool showRead = true;
@@ -88,24 +84,22 @@ public partial class BookDetailsPage : ContentPage
             try
             {
                 ImgReading = "reading.gif";
-                bool canReadOnline = await StartReadingLineByLine();
-                if (!canReadOnline)
+
+                if (CURRENT_LOCALE == null)
                 {
-                    if (CURRENT_LOCALE == null)
-                    {
-                        var locales = await TextToSpeech.Default.GetLocalesAsync();
-                        if (locales != null && locales.Count() > 0)
-                            CURRENT_LOCALE = locales.FirstOrDefault();
-                    }
-                    var settings = new SpeechOptions()
-                    {
-                        Volume = .75f,
-                        Pitch = 1.0f,
-                        Locale = CURRENT_LOCALE
-                    };
-                    _cancellationTokenSource = new CancellationTokenSource();
-                    await TextToSpeech.Default.SpeakAsync(MeetingContent, settings, _cancellationTokenSource?.Token ?? default);
+                    var locales = await TextToSpeech.Default.GetLocalesAsync();
+                    if (locales != null && locales.Count() > 0)
+                        CURRENT_LOCALE = locales.FirstOrDefault();
                 }
+                var settings = new SpeechOptions()
+                {
+                    Volume = .75f,
+                    Pitch = 1.0f,
+                    Locale = CURRENT_LOCALE
+                };
+                _cancellationTokenSource = new CancellationTokenSource();
+                await TextToSpeech.Default.SpeakAsync(MeetingContent, settings, _cancellationTokenSource?.Token ?? default);
+
                 ImgReading = "read.png";
             }
             catch (Exception ex)
@@ -114,57 +108,12 @@ public partial class BookDetailsPage : ContentPage
                 OnReadClick(); //only call when thiere is error
             }
         }
-
-        private Task<bool> StartReadingLineByLine()
-        {
-            return Task.FromResult(false);
-            //string audioUrl = await VUtils.GetApiAudio("testing");
-            //if (!string.IsNullOrEmpty(audioUrl))
-            //{
-            //    var contentArray = meetingContent.Split(" ");
-            //    foreach(var content in contentArray)
-            //    {
-            //        audioUrl = await VUtils.GetApiAudio(content);
-            //        _audioPlayer = await CreateAudioPlayerFromUrlAsync(audioUrl);
-            //        if (_audioPlayer != null)
-            //        {
-            //            _audioPlayer.Play(); Thread.Sleep((int)(_audioPlayer.Duration * 1000));
-            //        }
-            //    }
-            //    return true;
-            //}
-            //else return false;
-        }
-
-        private async Task<IAudioPlayer?> CreateAudioPlayerFromUrlAsync(string url)
-        {
-            try
-            {
-                using HttpClient client = new HttpClient();
-                var response = await client.GetAsync(url);
-                if (response.IsSuccessStatusCode)
-                {
-                    var stream = await response.Content.ReadAsStreamAsync();
-                    var audioPlayer = AudioManager.Current.CreatePlayer(stream);
-                    return audioPlayer;
-                }
-            }
-            catch (Exception)
-            { 
-            }
-            return null;
-        }
-
+         
         internal void StopReading()
         {
             try
             {
                 ImgReading = "read.png";
-
-                if (_audioPlayer != null && _audioPlayer.IsPlaying)
-                {
-                    _audioPlayer.Stop();
-                }
 
                 _cancellationTokenSource?.Cancel();
                 _cancellationTokenSource = null;

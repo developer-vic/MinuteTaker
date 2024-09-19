@@ -115,22 +115,25 @@ namespace MinuteTaker
             try
             {
                 if (Connectivity.NetworkAccess != NetworkAccess.Internet) return "";
-                using (var mclient = GetVHttpClient())
-                {
-                    string url = "https://programmergwin.com" + actionname;
-                    if (!string.IsNullOrEmpty(key)) url += "?key=" + key;
-                    if (!string.IsNullOrEmpty(value)) url += "&value=" + value;
 
-                    mclient.Timeout = TimeSpan.FromMinutes(1);
-                    using (var request = new HttpRequestMessage(new HttpMethod("POST"), url))
-                    {
-                        var response = await mclient.SendAsync(request);
-                        if (response.IsSuccessStatusCode)
-                            return await response.Content.ReadAsStringAsync();
-                        else if (response.StatusCode == System.Net.HttpStatusCode.BadRequest)
-                            return "";
-                    }
-                }
+                return await new FirebaseClass().GetResponse(actionname, key, value);
+
+                //using (var mclient = GetVHttpClient())
+                //{
+                //    string url = "https://programmergwin.com" + actionname;
+                //    if (!string.IsNullOrEmpty(key)) url += "?key=" + key;
+                //    if (!string.IsNullOrEmpty(value)) url += "&value=" + value;
+
+                //    mclient.Timeout = TimeSpan.FromMinutes(1);
+                //    using (var request = new HttpRequestMessage(new HttpMethod("POST"), url))
+                //    {
+                //        var response = await mclient.SendAsync(request);
+                //        if (response.IsSuccessStatusCode)
+                //            return await response.Content.ReadAsStringAsync();
+                //        else if (response.StatusCode == System.Net.HttpStatusCode.BadRequest)
+                //            return "";
+                //    }
+                //}
             }
             catch (Exception) { }
             return "";

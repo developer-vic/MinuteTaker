@@ -1,7 +1,4 @@
-﻿using Microsoft.Extensions.Logging;
-using CommunityToolkit.Maui;
-using Microsoft.Maui.Hosting;
-using Microsoft.Maui.Controls.Hosting;
+﻿using CommunityToolkit.Maui;
 using FFImageLoading.Maui;
 
 namespace MinuteTaker
@@ -22,7 +19,7 @@ namespace MinuteTaker
                 });
 
 #if DEBUG
-    		builder.Logging.AddDebug();
+    		//builder.Logging.AddDebug();
 #endif
 
             return builder.Build();
